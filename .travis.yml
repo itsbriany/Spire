@@ -1,0 +1,35 @@
+language: cpp
+
+compiler:
+  - clang
+  - gcc
+
+# Use cutting edge toolchains
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.8
+    packages:
+    - gcc-5
+    - g++-5
+    - clang-3.8
+    - cmake
+
+# Build with all different supported toolchains
+matrix:
+  include:
+    compiler:
+      - gcc
+      - clang
+    env:
+      - COMPILER=g++-5
+      - COMPILER=clang++-3.8
+      - BUILD_TYPE=Debug
+      - BUILD_TYPE=Release
+
+# Build the binaries
+script:
+  - mkdir build
+  - cd build
+  - cmake .. && make -j 4
