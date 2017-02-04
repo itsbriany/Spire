@@ -1,32 +1,24 @@
 language: cpp
 
-compiler:
-  - clang
-  - gcc
+compiler: gcc
 
 # Use cutting edge toolchains
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - llvm-toolchain-precise-3.8
+    - boost-latest
     packages:
-    - gcc-5
-    - g++-5
-    - clang-3.8
-    - cmake
+    - boost1.55
+    - gcc-6
 
 # Build with all different supported toolchains
 matrix:
   include:
-    compiler:
-      - gcc
-      - clang
     env:
-      - COMPILER=g++-5
-      - COMPILER=clang++-3.8
       - BUILD_TYPE=Debug
       - BUILD_TYPE=Release
+      - COMPILER=g++-7
 
 # Build the binaries
 script:
