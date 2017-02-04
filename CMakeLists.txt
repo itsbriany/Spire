@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 3.3)
+
+project(Spire)
+
+function(PrepareCompiler)
+    if (UNIX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14")
+        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+            message("Running debug build")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+        else ()
+            # Optimize for runtime, longer compile times
+            message("Running release build")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+        endif ()
+    else ()
+        message(FATAL_ERROR "Only *NIX operating systems are supported now")
+    endif ()
+endfunction(PrepareCompiler)
+
+function(FindBoost)
+    find_package(Boost REQUIRED COMPONENTS system log thread random)
+    if (NOT Boost_FOUND)
+        message(FATAL_ERROR "Could not find boost, try setting the BOOST_ROOT environment variable")
+    endif ()
+    include_directories(BOOST_INCLUDE_DIRS)
+    link_directories(Boost_LIBRARY_DIRS)
+endfunction(FindBoost)
+
+function(BuildSpire)
+    add_executable(Spire Spire.cpp Spire.h)
+    target_link_libraries(Spire ${Boost_LIBRARIES})
+endfunction()
+
+PrepareCompiler()
+FindBoost()
+BuildSpire()
